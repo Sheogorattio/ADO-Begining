@@ -23,6 +23,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label
                 Content="Registraion"
@@ -33,11 +34,13 @@
             <TextBox x:Name="RegName" Grid.Row="1" Grid.Column="2"></TextBox>
             <Label Grid.Row="2" Content="Login"/>
             <TextBox x:Name="RegLogin" Grid.Row="2" Grid.Column="2"></TextBox>
-            <Label Grid.Row="3" Content="Password"/>
-            <PasswordBox x:Name="RegPassword" Grid.Row="3" Grid.Column="2"></PasswordBox>
-            <Label Grid.Row="4" Content="Password rep."/>
-            <PasswordBox x:Name="RegPasswordRepeat" Grid.Row="4" Grid.Column="2"></PasswordBox>
-            <Button x:Name="RegisterButton" Grid.Column="2" Grid.Row="5" Margin="30 5 30 0" Click="RegisterButton_Click">Register</Button>
+            <Label Grid.Row="3" Content="Birth date"/>
+            <DatePicker x:Name="BirthDate" Grid.Row="3" Grid.Column="2"></DatePicker>
+            <Label Grid.Row="4" Content="Password"/>
+            <PasswordBox x:Name="RegPassword" Grid.Row="4" Grid.Column="2"></PasswordBox>
+            <Label Grid.Row="5" Content="Password rep."/>
+            <PasswordBox x:Name="RegPasswordRepeat" Grid.Row="5" Grid.Column="2"></PasswordBox>
+            <Button x:Name="RegisterButton" Grid.Column="2" Grid.Row="6" Margin="30 5 30 0" Click="RegisterButton_Click">Register</Button>
         </Grid>
         <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>

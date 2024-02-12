@@ -39,7 +39,7 @@ namespace WpfApp1
                 return;
             }
             using var cmd = new SqlCommand(
-                $"INSERT INTO Users VALUES( NEWID(), @name, @login, '{App.md5(RegPassword.Password)}' )",
+                $"INSERT INTO Users VALUES( NEWID(), @name, @login, N'{BirthDate.SelectedDate}' ,'{App.md5(RegPassword.Password)}' )",
                 App.msConnection);
             cmd.Parameters.Add(new SqlParameter("@name", System.Data.SqlDbType.VarChar, 64)
             {
