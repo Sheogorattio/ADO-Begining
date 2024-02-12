@@ -45,20 +45,21 @@ namespace WpfApp1
                 {
                     msConnection.Open();
                     MSConneectionStatusLabel.Content = "Connected";
+                
+                    CancelMsButton.IsEnabled = true;
+                    ConnectMsButton.IsEnabled = false;
+                    if (DoesTableExists("Users"))
+                    {
+                        DeleteMSButton.IsEnabled = true;
+                    }
+                    else
+                    {
+                        CreateMSButton.IsEnabled = true;
+                    }
                 }
                 catch (Exception ex)
                 {
                     MSConneectionStatusLabel.Content = ex.Message;
-                }
-                CancelMsButton.IsEnabled = true;
-                ConnectMsButton.IsEnabled = false;
-                if (DoesTableExists("Users"))
-                {
-                    DeleteMSButton.IsEnabled = true;
-                }
-                else
-                {
-                    CreateMSButton.IsEnabled = true;
                 }
             }
         }
@@ -141,6 +142,10 @@ namespace WpfApp1
             {
                 return "Fill Name box";
             }
+            if (String.IsNullOrEmpty(BirthDateTextBox.Text))
+            {
+                return "Fill Birth date box";
+            }
             return null;
         }
 
@@ -155,7 +160,7 @@ namespace WpfApp1
                     return;
                 }
                 using var cmd = new SqlCommand(
-                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', N'{BirthDateTextBox.SelectedDate}' ,'{md5(UserPasswordTextBox.Password)}')", msConnection);
+                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', N'{BirthDateTextBox.DisplayDate}' ,'{md5(UserPasswordTextBox.Password)}')", msConnection);
                 cmd.ExecuteNonQuery();
                 MSAddUserStatusLabel.Content = "Insert OK";
             }
@@ -199,7 +204,7 @@ namespace WpfApp1
                     var id = reader.GetGuid("Id");
                     var name = reader.GetString("Name");
                     var login = reader.GetString("Login");
-                    var birthDate = reader.GetString("BirthDate");
+                    var birthDate = reader.GetDateTime("BirthDate");
                     var hash = reader.GetString("PasswordHash");
                     SelectMsTextBlock.Text += $"{id.ToString()[..5]}... {name} {login} {birthDate} {hash[..5]}...\n";
                 }

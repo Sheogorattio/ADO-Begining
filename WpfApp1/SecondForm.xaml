@@ -68,7 +68,7 @@
                 <Label Content="Password"/>
                 <PasswordBox x:Name="UserPasswordTextBox" Width="164"/>
                 <Label Content="Birth date"/>
-                <DatePicker x:Name="BirthDateTextBox" Width="164"/>
+                <DatePicker x:Name="BirthDateTextBox" Width="164" SelectedDateFormat="Short"/>
                 <Button  x:Name="AddUserMSButton"
                          Content="Add user"
                          Click="AddUserMSButton_Click"/>
