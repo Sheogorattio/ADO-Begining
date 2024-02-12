@@ -31,5 +31,12 @@ namespace WpfApp1
             new SecondForm().ShowDialog();
             this.Show();
         }
+
+        private void AUSBytton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            new AuthWindow().ShowDialog();
+            this.Show();
+        }
     }
 }

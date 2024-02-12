@@ -6,28 +6,92 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="SecondForm" Height="450" Width="800">
-    <StackPanel Orientation="Vertical">
-        <Label 
-        Content="Вступ. Підключення БД"
-        HorizontalAlignment="Center"
-        FontSize="20"
-        FontWeight="DemiBold"/>
-        <StackPanel Orientation="Horizontal">
-            <Label Content="MS SQL Server"/>
-            <Button x:Name="ConnectMsButton"
-                Content="Connect"
-                Click="ConnectMSButton_Click"/>
-            <Label x:Name="MSConneectionStatusLabel"
-               Content="Disconnected"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical">
+            <Label 
+            Content="Вступ. Підключення БД"
+            HorizontalAlignment="Center"
+            FontSize="20"
+            FontWeight="DemiBold"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="MS SQL Server"/>
+                <Button x:Name="ConnectMsButton"
+                    Content="Connect"
+                    Click="ConnectMSButton_Click"/>
+                <Label x:Name="MSConneectionStatusLabel"
+                   Content="Disconnected"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="MS SQL Server" Visibility="Hidden"/>
+                <Button x:Name="CancelMsButton"
+            Content="Disconnect"
+            IsEnabled="False"
+            Click="CancelMsButton_Click"/>
+            </StackPanel>
+
+            <Label 
+            Content="Виконання запитів"
+            HorizontalAlignment="Center"
+            FontSize="20"
+            FontWeight="DemiBold"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Create table"/>
+                <Button x:Name="CreateMSButton"
+                 Content="Create"
+                 Click="CreateMSButton_Click"
+                 IsEnabled="False"/>
+                <Button x:Name="DeleteMSButton"
+                        Margin="5 0"
+                  Content="Delete"
+                  Click="DeleteMSButton_Click"
+                  IsEnabled="False"/>
+                <Label x:Name="MSCreateStatusLabel"
+           Content="Disconnected"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Name"/>
+                <TextBox x:Name="UserNameTextBox" Width="182" />
+                <Label Content="Login"/>
+                <TextBox x:Name="UserLoginTextBox" Width="237" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <Label Content="Password"/>
+                <PasswordBox x:Name="UserPasswordTextBox" Width="164"/>
+                <Label Content="Birth date"/>
+                <DatePicker x:Name="BirthDateTextBox" Width="164"/>
+                <Button  x:Name="AddUserMSButton"
+                         Content="Add user"
+                         Click="AddUserMSButton_Click"/>
+                <Label x:Name="MSAddUserStatusLabel"
+                Content=""/>
+            </StackPanel>
         </StackPanel>
-       
-        <StackPanel Orientation="Horizontal">
-            <Label Content="MS SQL Server" Visibility="Hidden"/>
-            <Button x:Name="CancelMsButton"
-        Content="Disconnect"
-        IsEnabled="False"
-        Click="CancelMsButton_Click"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+            <Button Content="Показати дані (MS)"
+                    Margin="20 0"
+                    x:Name="SelectMSButton"
+                    Click="SelectMSButton_Click">
+            </Button>
+            <TextBlock x:Name="SelectMsTextBlock"></TextBlock>
         </StackPanel>
-    </StackPanel>
-    
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+            <Button Content="Показати дані (My)"
+                    Margin="20 0"
+                    x:Name="SelectMyButton"
+                    >
+
+            </Button>
+            <TextBlock x:Name="SelectMyTextBlock"></TextBlock>
+        </StackPanel>
+    </Grid>
 </Window>
