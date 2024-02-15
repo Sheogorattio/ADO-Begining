@@ -60,9 +60,9 @@
         HorizontalAlignment="Center"
         Grid.ColumnSpan="2"/>
 
-            <Label Grid.Row="1" Content="Name"/>
+            <Label Grid.Row="1" Content="Login"/>
             <TextBox x:Name="AuthLogin" Grid.Row="1" Grid.Column="2"></TextBox>
-            <Label Grid.Row="2" Content="Login"/>
+            <Label Grid.Row="2" Content="Password"/>
             <PasswordBox x:Name="AuthPass" Grid.Row="2" Grid.Column="2"></PasswordBox>
             <Button x:Name="LoginINButton" Grid.Column="2" Grid.Row="5" Margin="30 5 30 0" Click="LoginINButton_Click">Login in</Button>
         </Grid>

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp1.DAL.DAO;
 
 namespace WpfApp1
 {
@@ -38,22 +39,23 @@ namespace WpfApp1
                     MessageBoxImage.Error);
                 return;
             }
-            using var cmd = new SqlCommand(
-                $"INSERT INTO Users VALUES( NEWID(), @name, @login, N'{BirthDate.SelectedDate}' ,'{App.md5(RegPassword.Password)}' )",
-                App.msConnection);
-            cmd.Parameters.Add(new SqlParameter("@name", System.Data.SqlDbType.VarChar, 64)
-            {
-                Value = RegName.Text
-            });
-            cmd.Parameters.Add(new SqlParameter("@login", System.Data.SqlDbType.VarChar, 64)
-            {
-                Value = RegLogin.Text
-            });
+
             try
             {
-                cmd.Prepare();  // підготовка запиту - компіляція без параметрів
-                cmd.ExecuteNonQuery();  // виконання - передача даних у скомпільований запит
-                MessageBox.Show("Insert OK");
+                if (UserDao.AddUser(new()
+                {
+                    Name = this.RegName.Text,
+                    Login = this.RegLogin.Text,
+                    PasswordHash = App.md5(RegPassword.Password),
+                    BirthDate = this.BirthDate.SelectedDate
+                }))
+                {
+                    MessageBox.Show("Insert OK");
+                }
+                else
+                {
+                    MessageBox.Show("Insert failed");
+                }
             }
             catch (Exception ex)
             {
@@ -106,6 +108,7 @@ namespace WpfApp1
                    MessageBoxImage.Error);
                 return;
             }
+            UserDao.GetUserByCredentials(AuthLogin.Text, App.md5(AuthPass.Password));
                 //using var cmd = new SqlCommand(
                 //    $"SELECT * FROM Users WHERE @name={}",
                 //    App.msConnection);

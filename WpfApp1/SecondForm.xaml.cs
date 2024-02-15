@@ -48,7 +48,7 @@ namespace WpfApp1
                 
                     CancelMsButton.IsEnabled = true;
                     ConnectMsButton.IsEnabled = false;
-                    if (DoesTableExists("Users"))
+                    if (DoesTableExist("Users") == true)
                     {
                         DeleteMSButton.IsEnabled = true;
                     }
@@ -64,12 +64,16 @@ namespace WpfApp1
             }
         }
 
-        private bool DoesTableExists(string TableName)
+        private bool? DoesTableExist(string TableName)
         {
-            return msConnection?.GetSchema("TABLES", //проверка существует ли таблица
-                    new string[] { null, null, TableName }).Rows.Count > 0;
+            if (msConnection != null)
+            {
+                return msConnection.GetSchema("TABLES", //проверка существует ли таблица
+                       new string[] { null, null, TableName }).Rows.Count > 0;
+            }
+            return null;
         }
-
+        
         private void CancelMsButton_Click(object sender, RoutedEventArgs e)
         {
             if (msConnection != null)
@@ -94,7 +98,7 @@ namespace WpfApp1
         {
             if(msConnection!=null)
             {
-                if (!DoesTableExists("Users"))
+                if (DoesTableExist("Users") != true)
                 {
                     //виконання SQL запитів
                     //загальна схема
@@ -160,7 +164,11 @@ namespace WpfApp1
                     return;
                 }
                 using var cmd = new SqlCommand(
-                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', N'{BirthDateTextBox.DisplayDate}' ,'{md5(UserPasswordTextBox.Password)}')", msConnection);
+                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', @birthDate ,'{md5(UserPasswordTextBox.Password)}')", msConnection);
+                cmd.Parameters.Add(new SqlParameter("@birthDate", System.Data.SqlDbType.Date)
+                {
+                    Value = this.BirthDateTextBox.DisplayDate
+                });
                 cmd.ExecuteNonQuery();
                 MSAddUserStatusLabel.Content = "Insert OK";
             }
@@ -219,12 +227,12 @@ namespace WpfApp1
         {
             if(msConnection != null)
             {
-                if (DoesTableExists("Users"))
+                if (DoesTableExist("Users") == true)
                 {
                     try
                     {
                         using var cmd = new SqlCommand("DROP TABLE Users", msConnection);
-                        cmd.BeginExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                         MSAddUserStatusLabel.Content = "Delete OK";
                         this.DeleteMSButton.IsEnabled = false;
                         this.CreateMSButton.IsEnabled=true;
@@ -242,6 +250,19 @@ namespace WpfApp1
         }
     }
 }
+
+/*  ORM. DAD. DAL.
+    Object realation mapping (ORM) -відображення даних та зв'язків між ними (Relations) на 
+    об'єкти. Іншими словами, створення об'єктів мови прогамування, які за структурою 
+    максимально наближені до даних, що надходять до програми (БД, JSON, тощо).
+    Такі об'єкти також відомі як DTO (data transfer object) або Entity.
+    Робота з даними переводиться до роботи з об'єктами. Утворюються перехідні засоби - DAO
+    (data access object) 
+    UserDAO.CreateUser(UserDtio user)
+    List<UserDAO> UserDAo.GetAll();
+    Сукупність DAO для різних даних утворює DAL (data access layer) - архітектурний шар 
+    проєктуб також відомий, як контекст даних.
+ */
 
 /*
     ADO.NET Вступ
