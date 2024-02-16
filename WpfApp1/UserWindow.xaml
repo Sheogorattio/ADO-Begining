@@ -1,0 +1,50 @@
+﻿<Window x:Class="WpfApp1.UserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="UserWindow" Height="250" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Content="Edit user"
+               HorizontalAlignment="Center"
+               FontWeight="DemiBold"
+               FontSize="16"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="ID"/>
+        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" x:Name="IdTextBox"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Name"/>
+        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="False"  x:Name="NameTextBox"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="Login"/>
+        <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="False" x:Name="LoginTextBox"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="Birt date"/>
+        <DatePicker Grid.Row="4" Grid.Column="1"  x:Name="BirtDateTextBox"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="DK"/>
+        <UniformGrid Grid.Row="5" Grid.Column="1" Rows="1" Columns="2">
+            <TextBox  IsReadOnly="True"  x:Name="DkTextBox" />
+            <Button x:Name="ChangePswd" Click="ChangePswd_Click">Change password</Button>
+        </UniformGrid>
+        
+
+        <UniformGrid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Rows="1">
+            <Button x:Name="CloseButton" Content="Close" Margin="15 7" Click="CloseButton_Click"/>
+            <Button x:Name="SaveButton" Content="Save" Margin="15 7" Click="SaveButton_Click"/>
+            <Button x:Name="DeleteButton" Content="Delete" Margin="15 7" Click="DeleteButton_Click"/>
+        </UniformGrid>
+    </Grid>
+</Window>

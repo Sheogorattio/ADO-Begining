@@ -38,5 +38,12 @@ namespace WpfApp1
             new AuthWindow().ShowDialog();
             this.Show();
         }
+
+        private void CrudBytton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            new CrudWindow().ShowDialog(); 
+            this.Show();
+        }
     }
 }
