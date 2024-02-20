@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,6 +17,11 @@ namespace WpfApp1
     /// </summary>
     public partial class App : Application
     {
+        public static void LogError(string message, [CallerMemberName] string callerName="undefined")
+        {
+            System.IO.File.AppendAllText("logs.txt", $"{DateTime.Now} {callerName} {message}\n");
+        }
+
         private static SqlConnection? _msConnection;
 
         public static SqlConnection msConnection

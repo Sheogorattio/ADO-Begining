@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,10 +13,80 @@ namespace WpfApp1.DAL.DAO
 {
     internal class UserDao
     {
-        public static List<User> GetAll()
+        public static Boolean DeleteUser(User user, bool hardMode = false)
+        {
+            ArgumentNullException.ThrowIfNull(user);
+            if (user.Id == null)
+            {
+                throw new ArgumentNullException("Argument field must not be default.", "user.Id");
+            }
+            using var cmd = new SqlCommand(
+                  null, App.msConnection);
+            if (hardMode)
+            {
+                cmd.CommandText = $"DELETE from Users WHERE Id ='{user.Id}'";
+            }
+            else
+            {
+                cmd.CommandText = $"UPDATE Users SET DeleteDt = CURRENT_TIMESTAMP, Name = '', BirthDate ='{DateOnly.MinValue}' WHERE Id='{user.Id}'";
+            }
+            try
+            {
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                App.LogError(ex.Message);
+                return false;
+            }
+        }
+
+        public static Boolean UpdateUser(User user)
+        {
+            ArgumentNullException.ThrowIfNull(user);
+            if(user.Id == default) //можна покращити і перевіряти наявність у БД 
+            {
+                throw new ArgumentNullException("ID field value must not be default." ,"user.Id");
+            }
+            try
+            {
+                using var cmd = new SqlCommand(
+                    $"update Users set Name=@name, Login=@login, BirthDate=@birthDate , PasswordHash=@passHash where ID=@id", App.msConnection);
+                cmd.Parameters.Add(new SqlParameter("@birthDate", System.Data.SqlDbType.DateTime)
+                {
+                    Value = user.BirthDate
+                });
+                cmd.Parameters.Add(new SqlParameter("@name", System.Data.SqlDbType.VarChar, 64)
+                {
+                    Value = user.Name
+                });
+                cmd.Parameters.Add(new SqlParameter("@login", System.Data.SqlDbType.VarChar, 64)
+                {
+                    Value = user.Login
+                });
+                cmd.Parameters.Add(new SqlParameter("@passHash", System.Data.SqlDbType.Char, 32)
+                {
+                    Value = user.PasswordHash
+                });
+                cmd.Parameters.Add(new SqlParameter("@id", System.Data.SqlDbType.UniqueIdentifier)
+                {
+                    Value = user.Id
+                });
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                App.LogError(ex.Message);
+            }
+            return false;
+        }
+        public static List<User> GetAll(bool showDeleted = false)
         {
             using SqlCommand cmd = new(
-                "Select * from Users", 
+                "Select * from Users " + (showDeleted? "" : "WHERE DeleteDt IS NULL"), 
                 App.msConnection);
             try
             {
@@ -30,6 +101,7 @@ namespace WpfApp1.DAL.DAO
             }
             catch (Exception ex)
             {
+                App.LogError(ex.Message);
                 return null!;
             }
         }

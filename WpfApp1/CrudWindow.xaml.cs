@@ -44,9 +44,61 @@ namespace WpfApp1
             {
                 if(item.Content is User user)
                 {
-                    bool? result = new UserWindow(user).ShowDialog();
-                    MessageBox.Show(result.ToString() ?? "null");
+                    UserWindow dialog = new UserWindow(user);
+                    dialog.ShowDialog();
+                    switch (dialog.SelectedAction)
+                    {
+                        case CrudActions.Delete:
+                        {
+                            DeleteUser(user);
+                            break;
+                        }
+                        case CrudActions.Update:
+                        {
+                            UpdateUser(user);
+                            break;
+                        }
+
+                    }
                 }
+            }
+        }
+
+        private void UpdateUser(User user)
+        {
+            ArgumentNullException.ThrowIfNull(user);
+
+            if (UserDao.UpdateUser(user))
+            {
+                MessageBox.Show("Updated successfully");
+                foreach (var targetUser in Users)
+                {
+                    if (targetUser.Id == user.Id)
+                    {
+                        Users.Remove(targetUser);
+                        break;
+                    }
+                }
+                Users.Add(user);
+            }
+            else
+            {
+                MessageBox.Show("Operation failed. Try again later.");
+            }
+        }
+
+        private void DeleteUser(User user)
+        {
+            ArgumentNullException.ThrowIfNull(user);
+
+            if (UserDao.DeleteUser(user))
+            {
+                MessageBox.Show("Deleted successfully");
+                Users.Remove(user);
+            }
+            else
+            {
+                MessageBox.Show("Operation failed. Try again later.");
             }
         }
     }

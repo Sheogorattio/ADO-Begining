@@ -110,7 +110,8 @@ namespace WpfApp1
                     Name         nvarchar(64)       not null,
                     Login        nvarchar(64)       not null,
                     BirthDate    date               not null,
-                    PasswordHash char(32)           not null
+                    PasswordHash char(32)           not null,
+                    DeleteDt     datetime           NULL
                 )
                 ";
                     try
@@ -164,7 +165,7 @@ namespace WpfApp1
                     return;
                 }
                 using var cmd = new SqlCommand(
-                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', @birthDate ,'{md5(UserPasswordTextBox.Password)}')", msConnection);
+                    $"insert into Users values(NEWID(), N'{UserNameTextBox.Text}', N'{UserLoginTextBox.Text}', @birthDate ,'{md5(UserPasswordTextBox.Password)}', null)", msConnection);
                 cmd.Parameters.Add(new SqlParameter("@birthDate", System.Data.SqlDbType.Date)
                 {
                     Value = this.BirthDateTextBox.DisplayDate

@@ -21,10 +21,12 @@ namespace WpfApp1
     public partial class UserWindow : Window
     {
         private readonly User _user;
+        public CrudActions SelectedAction {  get; private set; }
         public UserWindow(User user)
         {
             InitializeComponent();
             _user = user;
+            SelectedAction = CrudActions.None;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -38,25 +40,30 @@ namespace WpfApp1
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = null;
             this.Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            _user.Name = NameTextBox.Text;
+            _user.Login = LoginTextBox.Text;
+            _user.PasswordHash = DkTextBox.Text;
+            _user.BirthDate = BirtDateTextBox.SelectedDate;
+
+            SelectedAction = CrudActions.Update;
             this.DialogResult= true;
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
+            SelectedAction = CrudActions.Delete;
+            this.DialogResult = true;
         }
 
         private void ChangePswd_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            new PasswordChangeForm().ShowDialog();
-            this.Show();
+            new PasswordChangeForm(_user).ShowDialog();
+            DkTextBox.Text = _user.PasswordHash.ToString();
         }
     }
 }
